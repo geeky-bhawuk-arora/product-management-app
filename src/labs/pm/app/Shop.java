@@ -41,8 +41,10 @@ public class Shop {
 //        p1.setName("Tea");
 //        p1.setPrice(BigDecimal.valueOf(1.99));
 //        System.out.println(p1.getId() + " " + p1.getName() + " " + p1.getPrice() + " " + p1.getDiscount());
+        Product p1 = new Drink(101, "Tea", BigDecimal.valueOf(1.99)); 
         Product p2 = new Drink(102, "Coffee", BigDecimal.valueOf(1.99));
         Product p3 = new Food(103, "Cake", BigDecimal.valueOf(3.99), LocalDate.now().plusDays(2));
+        Product p4 = new Food(104, "Cookie", BigDecimal.valueOf(3.99), LocalDate.now());
 
         System.out.println(p2);
         System.out.println(p3);

@@ -33,7 +33,7 @@ import java.util.Objects;
  * @version 4.0
  * @author Bhawuk
  */
-public class Product {
+public abstract class Product {
 
     private int id;
     private String name;
@@ -90,8 +90,7 @@ public class Product {
     @Override
     public String toString() {
         return "id" + "," + name + "," + getDiscount() + ",";
-        
-        
+
     }
 
     @Override
@@ -101,22 +100,39 @@ public class Product {
         return hash;
     }
 
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) {
+//            return true;
+//        }
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final Product other = (Product) obj;
+//        if (this.id != other.id) {
+//            return false;
+//        }
+//        if (!Objects.equals(this.name, other.name)) {
+//            return false;
+//        }
+//        return true;
+//        
+//    }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
-            return false;
+        if (obj instanceof Product) {
+            final Product other = (Product)obj;
+            return this.id == other.id && Objects.equals(this.name, other.name);
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Product other = (Product) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        return Objects.equals(this.name, other.name);
+        return false;
     }
 
+ 
 }
