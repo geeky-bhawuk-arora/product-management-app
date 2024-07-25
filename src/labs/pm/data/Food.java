@@ -15,11 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package labs.pm.app;
+package labs.pm.data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import labs.pm.data.Product;
 
 /**
  *
@@ -29,8 +28,8 @@ public class Food extends Product {
 
     private LocalDate bestBefore;
 
-    public Food(int id, String name, BigDecimal price, LocalDate bestBefore) {
-        super(id, name, price);
+    public Food(int id, String name, BigDecimal price, Rating rating, LocalDate bestBefore) {
+        super(id, name, price, rating);
         this.bestBefore = bestBefore;
     }
 

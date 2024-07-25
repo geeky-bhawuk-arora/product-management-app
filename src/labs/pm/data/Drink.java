@@ -15,12 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package labs.pm.app;
+package labs.pm.data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import labs.pm.data.Product;
 
 /**
  *
@@ -28,16 +26,15 @@ import labs.pm.data.Product;
  */
 public class Drink extends Product {
 
-    public Drink(int id, String name, BigDecimal price) {
-        super(id, name, price);
-
+    public Drink(int id, String name, BigDecimal price, Rating rating) {
+        super(id, name, price, rating);
     }
 
     @Override
     public BigDecimal getDiscount() {
         LocalTime now = LocalTime.now();
-        return (now.isAfter(LocalTime.of(17, 30))) && 
-                now.isBefore(LocalTime.of(18, 30))
+        return (now.isAfter(LocalTime.of(10, 30))) && 
+                now.isBefore(LocalTime.of(11, 30))
                 ? super.getDiscount()
                 : BigDecimal.ZERO;
     }

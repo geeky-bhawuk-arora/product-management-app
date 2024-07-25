@@ -40,9 +40,9 @@ public class Product {
     private String name;
     private BigDecimal price;
     private Rating rating;
-    
+
     public Product() {
-        this(0,"no name", BigDecimal.ZERO);
+        this(0, "no name", BigDecimal.ZERO);
     }
 
     public Product(int id, String name, BigDecimal price) {
@@ -56,13 +56,13 @@ public class Product {
         this.rating = rating;
     }
 
-/**
- * A constant that defined a {@link java.math.BigDecimal BigDecimal} value of
- * the discount rate
- * <br>
- * Discount rate is 10%
- */
-   public static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.1);
+    /**
+     * A constant that defined a {@link java.math.BigDecimal BigDecimal} value
+     * of the discount rate
+     * <br>
+     * Discount rate is 10%
+     */
+    public static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.1);
 
     public int getId() {
         return id;
@@ -71,7 +71,6 @@ public class Product {
 //    public void setId(final int id) {
 //        this.id = id;
 //    }
-
     public String getName() {
         return name;
     }
@@ -79,7 +78,6 @@ public class Product {
 //    public void setName(final String name) {
 //        this.name = name;
 //    }
-
     public BigDecimal getPrice() {
         return price;
     }
@@ -87,7 +85,6 @@ public class Product {
 //    public void setPrice(final BigDecimal price) {
 //        this.price = price;
 //    }
-
     /**
      * Calculates discount based on a product price and
      * {@link DISCOUNT_RATE discount rate}
@@ -101,16 +98,14 @@ public class Product {
     public Rating getRating() {
         return rating;
     }
-    
+
     public Product applyRating(Rating newRating) {
         return new Product(id, name, price, newRating);
     }
-    
-    
 
     @Override
     public String toString() {
-        return "id" + "," + name + "," + getDiscount() + ",";
+        return id + "," + name + "," + price + "," + rating.getStars();
 
     }
 
@@ -142,18 +137,16 @@ public class Product {
 //        return true;
 //        
 //    }
-    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
         if (obj instanceof Product) {
-            final Product other = (Product)obj;
+            final Product other = (Product) obj;
             return this.id == other.id && Objects.equals(this.name, other.name);
         }
         return false;
     }
 
- 
 }
