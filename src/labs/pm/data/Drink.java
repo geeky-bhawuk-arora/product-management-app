@@ -26,7 +26,7 @@ import java.time.LocalTime;
  */
 public class Drink extends Product {
 
-    public Drink(int id, String name, BigDecimal price, Rating rating) {
+    Drink(int id, String name, BigDecimal price, Rating rating) {
         super(id, name, price, rating);
     }
 
@@ -37,5 +37,10 @@ public class Drink extends Product {
                 now.isBefore(LocalTime.of(11, 30))
                 ? super.getDiscount()
                 : BigDecimal.ZERO;
+    }
+
+    @Override
+    public Product applyRating(Rating newRating) {
+        return new Drink(getId(), getName(), getPrice(), newRating);
     }
 }

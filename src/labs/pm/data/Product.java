@@ -18,6 +18,8 @@
 package labs.pm.data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import static java.math.RoundingMode.HALF_UP;
 import java.util.Objects;
 import static labs.pm.data.Rating.*;
@@ -34,22 +36,22 @@ import static labs.pm.data.Rating.*;
  * @version 4.0
  * @author Bhawuk
  */
-public class Product {
+public abstract class Product {
 
     private int id;
     private String name;
     private BigDecimal price;
     private Rating rating;
 
-    public Product() {
-        this(0, "no name", BigDecimal.ZERO);
-    }
+    // Product() {
+    //     this(0, "no name", BigDecimal.ZERO);
+    // }
 
-    public Product(int id, String name, BigDecimal price) {
-        this(id, name, price, NOT_RATED);
-    }
+    // Product(int id, String name, BigDecimal price) {
+    //     this(id, name, price, NOT_RATED);
+    // }
 
-    public Product(int id, String name, BigDecimal price, Rating rating) {
+    Product(int id, String name, BigDecimal price, Rating rating) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -99,13 +101,25 @@ public class Product {
         return rating;
     }
 
-    public Product applyRating(Rating newRating) {
-        return new Product(id, name, price, newRating);
+    // public Product applyRating(Rating newRating) {
+    //     return new Product(id, name, price, newRating);
+    // }
+
+    public abstract Product applyRating(Rating newRating);
+    
+    /**
+     * Assumes that the best before data is today
+     *
+     * @return the value of bestBefore
+     */
+    public LocalDate getBestBefore() {
+        return LocalDate.now();
     }
+
 
     @Override
     public String toString() {
-        return id + "," + name + "," + price + "," + rating.getStars();
+        return id + "," + name + "," + price + "," + rating.getStars() + " " + getBestBefore();
 
     }
 
