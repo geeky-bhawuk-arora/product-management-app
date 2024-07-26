@@ -15,27 +15,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package labs.pm.data;
+
 /**
  *
  * @author Deepika
  */
+public class Review {
+    private Rating rating;
+    private String comments;
 
-public enum Rating {
-    NOT_RATED("\u2606\u2606\u2606\u2606\u2606"),
-    ONE_STAR("\u2605\u2606\u2606\u2606\u2606"),
-    TWO_STAR("\u2605\u2605\u2606\u2606\u2606"),
-    THREE_STAR("\u2605\u2605\u2605\u2606\u2606"),
-    FOUR_STAR("\u2605\u2605\u2605\u2605\u2606"),
-    FIVE_STAR("\u2605\u2605\u2605\u2605\u2605");
-    
-    private String stars;
-
-    private Rating(String stars) {
-        this.stars = stars;
+    public Review(Rating rating, String comments) {
+        this.rating = rating;
+        this.comments = comments;
     }
 
-    public String getStars() {
-        return stars;
+    public Rating getRating() {
+        return rating;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    @Override
+    public String toString() {
+        return rating + " " + comments;
     }
     
     

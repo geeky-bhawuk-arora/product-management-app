@@ -15,29 +15,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package labs.pm.data;
+
 /**
  *
  * @author Deepika
  */
-
-public enum Rating {
-    NOT_RATED("\u2606\u2606\u2606\u2606\u2606"),
-    ONE_STAR("\u2605\u2606\u2606\u2606\u2606"),
-    TWO_STAR("\u2605\u2605\u2606\u2606\u2606"),
-    THREE_STAR("\u2605\u2605\u2605\u2606\u2606"),
-    FOUR_STAR("\u2605\u2605\u2605\u2605\u2606"),
-    FIVE_STAR("\u2605\u2605\u2605\u2605\u2605");
+@FunctionalInterface
+public interface Rateable<T> {
+    public static final Rating DEFAULT_RATING = Rating.NOT_RATED;
     
-    private String stars;
-
-    private Rating(String stars) {
-        this.stars = stars;
-    }
-
-    public String getStars() {
-        return stars;
+    public abstract T applyRating(Rating rating);
+    
+    public default T applyRating(int stars) {
+        return applyRating(convert(stars));
     }
     
+    public default Rating getRating() {
+        return DEFAULT_RATING;
+    }
     
+    public static Rating convert(int stars) {
+        return (stars>=0 && stars<=5) ? Rating.values() [stars] : DEFAULT_RATING;
+        
+    }
     
 }
