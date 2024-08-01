@@ -37,7 +37,6 @@ public class Shop {
     /**
      * @param args the command line arguments
      */
-    @SuppressWarnings("UnusedAssignment")
     public static void main(String[] args) {
 
 //          Product p1 = new Product();
@@ -86,19 +85,34 @@ public class Shop {
         // }
         // System.out.println(p3.getBestBefore());
         // System.out.println(p2.getBestBefore());
+//        ProductManager pm = new ProductManager(Locale.UK);
         ProductManager pm = new ProductManager(Locale.UK);
 
+//        Product p1 = pm.createProduct(101, "Tea", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
+//        p1 = pm.reviewProduct(p1, Rating.FOUR_STAR, "Nice hot cup of tea");
+//        p1 = pm.reviewProduct(p1, Rating.TWO_STAR, "Rather weak tea");
+//        p1 = pm.reviewProduct(p1, Rating.ONE_STAR, "Good tea");
+//        p1 = pm.reviewProduct(p1, Rating.THREE_STAR, "Just add some lemon");
+//        pm.printProductReport(p1);
+        
         Product p1 = pm.createProduct(101, "Tea", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
-        pm.printProductReport();
-
-        p1 = pm.reviewProduct(p1, Rating.FOUR_STAR, "Nice hot cup of tea");
-        p1 = pm.reviewProduct(p1, Rating.TWO_STAR, "Rather weak tea");
-        p1 = pm.reviewProduct(p1, Rating.ONE_STAR, "Good tea");
-        p1 = pm.reviewProduct(p1, Rating.THREE_STAR, "Just add some lemon");
-        pm.printProductReport();
+        pm.reviewProduct(101, Rating.FOUR_STAR, "Nice hot cup of tea");
+        pm.reviewProduct(101, Rating.TWO_STAR, "Rather weak tea");
+        pm.reviewProduct(101, Rating.ONE_STAR, "Good tea");
+        pm.reviewProduct(101, Rating.THREE_STAR, "Just add some lemon");
+        pm.printProductReport(101);
 
 //        Product p2 = pm.createProduct(102, "Coffee", BigDecimal.valueOf(1.99), Rating.FOUR_STAR);
-//
+//        p2 = pm.reviewProduct(p2, Rating.TWO_STAR, "Coffee was Ok");
+//        p2 = pm.reviewProduct(p2, Rating.ONE_STAR, "Where is the milk?");
+//        p2 = pm.reviewProduct(p2, Rating.THREE_STAR, "It's perfect with ten spoons of sugar");
+//        pm.printProductReport(p2);
+        
+        Product p2 = pm.createProduct(102, "Coffee", BigDecimal.valueOf(1.99), Rating.FOUR_STAR);
+        pm.reviewProduct(102, Rating.TWO_STAR, "Coffee was Ok");
+        pm.reviewProduct(102, Rating.ONE_STAR, "Where is the milk?");
+        pm.reviewProduct(102, Rating.THREE_STAR, "It's perfect with ten spoons of sugar");
+        pm.printProductReport(102);
 //        Product p3 =  pm.createProduct(103, "Cake", BigDecimal.valueOf(3.99), Rating.FIVE_STAR, LocalDate.now().plusDays(2));
 //
 //        Product p4 =  pm.createProduct(104, "Cookie", BigDecimal.valueOf(3.99), Rating.THREE_STAR, LocalDate.now());
