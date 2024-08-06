@@ -87,7 +87,6 @@ public class Shop {
         // System.out.println(p3.getBestBefore());
         // System.out.println(p2.getBestBefore());
 //        ProductManager pm = new ProductManager(Locale.UK);
-
         ProductManager pm = new ProductManager("de-DB");
 
 //        Product p1 = pm.createProduct(101, "Tea", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
@@ -96,7 +95,6 @@ public class Shop {
 //        p1 = pm.reviewProduct(p1, Rating.ONE_STAR, "Good tea");
 //        p1 = pm.reviewProduct(p1, Rating.THREE_STAR, "Just add some lemon");
 //        pm.printProductReport(p1);
-        
         pm.createProduct(101, "Tea", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
         pm.reviewProduct(101, Rating.FOUR_STAR, "Nice hot cup of tea");
         pm.reviewProduct(101, Rating.TWO_STAR, "Rather weak tea");
@@ -109,7 +107,6 @@ public class Shop {
 //        p2 = pm.reviewProduct(p2, Rating.ONE_STAR, "Where is the milk?");
 //        p2 = pm.reviewProduct(p2, Rating.THREE_STAR, "It's perfect with ten spoons of sugar");
 //        pm.printProductReport(p2);
-        
         pm.createProduct(102, "Coffee", BigDecimal.valueOf(2.99), Rating.FOUR_STAR);
         pm.reviewProduct(102, Rating.TWO_STAR, "Coffee was Ok");
         pm.reviewProduct(102, Rating.ONE_STAR, "Where is the milk?");
@@ -119,11 +116,14 @@ public class Shop {
 
 //        pm.printProducts((p1, p2)-> p2.getRating().ordinal() - p1.getRating().ordinal());
 //        pm.printProducts((p1, p2)-> p2.getPrice().compareTo(p1.getPrice()));
-        
-        Comparator<Product> ratingSorter = (p1, p2)-> p2.getRating().ordinal() - p1.getRating().ordinal();
-        Comparator<Product> priceSorter = (p1, p2)-> p2.getPrice().compareTo(p1.getPrice());
+        pm.printProducts(p -> p.getPrice().floatValue() < 2,
+                (p1, p2) -> p2.getRating().ordinal() - p1.getRating().ordinal()
+        );
 
-        pm.printProducts(ratingSorter.thenComparing(priceSorter));
+        Comparator<Product> ratingSorter = (p1, p2) -> p2.getRating().ordinal() - p1.getRating().ordinal();
+        Comparator<Product> priceSorter = (p1, p2) -> p2.getPrice().compareTo(p1.getPrice());
+
+//        pm.printProducts(ratingSorter.thenComparing(priceSorter));
 //        Product p3 =  pm.createProduct(103, "Cake", BigDecimal.valueOf(3.99), Rating.FIVE_STAR, LocalDate.now().plusDays(2));
 //
 //        Product p4 =  pm.createProduct(104, "Cookie", BigDecimal.valueOf(3.99), Rating.THREE_STAR, LocalDate.now());
@@ -145,5 +145,7 @@ public class Shop {
 //        System.out.println(p3.getBestBefore());
 //        System.out.println(p1.getBestBefore());
 //        
+        pm.getDiscounts().forEach(
+                (rating, discount) -> System.out.println(rating + "\t" + discount));
     }
 }
