@@ -3,6 +3,7 @@ package labs.pm.data;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -17,6 +18,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ProductManager {
@@ -36,6 +39,10 @@ public class ProductManager {
         private ResourceBundle resources;
         private DateTimeFormatter dateFormat;
         private NumberFormat moneyFormat;
+        private static final Logger logger = Logger.getLogger(ProductManager.class.getName());
+        private ResourceBundle config = ResourceBundle.getBundle("labs.pm.data.config");
+        private MessageFormat reviewFormat = new MessageFormat(config.getString("labs.pm.data.config"));
+        private MessageFormat productFormat = new MessageFormat(config.getString("labs.pm.data.config"));
 
         private ResourceFormatter(Locale locale) {
             this.locale = locale;
@@ -56,6 +63,19 @@ public class ProductManager {
             return MessageFormat.format(resources.getString("review"),
                     review.getRating().getStars(),
                     review.getComments());
+        }
+
+        public void parseReview(String text) {
+            try {
+                Object[] values = reviewFormat.parse(text);
+                reviewProduct(
+                        Integer.parseInt((String) values[0]),
+                        Rateable.convert(Integer.parseInt((String) values[1])),
+                        (String) values[2]
+                );
+            } catch (ParseException ex) {
+                logger.log(Level.WARNING, "Error parsing review " + text, ex);
+            }
         }
 
         private String getText(String key) {
@@ -101,7 +121,13 @@ public class ProductManager {
     }
 
     public Product reviewProduct(int id, Rating rating, String comments) {
-        return reviewProduct(findProduct(id), rating, comments);
+        try {
+            return reviewProduct(findProduct(id), rating, comments);
+        } catch (ProductManagerException ex) {
+            Logger.getLogger(ProductManager.class.getName()).log(Level.INFO, ex.getMessage(), ex);
+//            logger.log(Level.INFO, ex.getMessage()); ---> Error
+            return null;
+        }
     }
 
     public Product reviewProduct(Product product, Rating rating, String comments) {
@@ -146,7 +172,12 @@ public class ProductManager {
     }
 
     public void printProductReport(int id) {
-        printProductReport(findProduct(id));
+        try {
+            printProductReport(findProduct(id));
+        } catch (ProductManagerException ex) {
+            Logger.getLogger(ProductManager.class.getName()).log(Level.SEVERE, null, ex);
+//            logger.log(Level.INFO, ex.getMessage()); ---> Error
+        }
     }
 
     public void printProductReport(Product product) {
@@ -192,7 +223,7 @@ public class ProductManager {
 //    System.out.println (txt);
     }
 
-    public Product findProduct(int id) {
+    public Product findProduct(int id) throws ProductManagerException {
 //        Product result = null;
 //        for(Product product: products.keySet()){
 //            if(product.getId() == id) {
@@ -207,7 +238,10 @@ public class ProductManager {
                 .stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
-                .orElseGet(() -> null);
+                //                .orElseGet(() -> null);
+                //                .get(); 
+                .orElseThrow(()
+                        -> new ProductManagerException("Product with id " + id + " not found"));
     }
 
     public void printProducts(Predicate<Product> filter, Comparator<Product> sorter) {

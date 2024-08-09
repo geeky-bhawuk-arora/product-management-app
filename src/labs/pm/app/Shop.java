@@ -96,11 +96,15 @@ public class Shop {
 //        p1 = pm.reviewProduct(p1, Rating.THREE_STAR, "Just add some lemon");
 //        pm.printProductReport(p1);
         pm.createProduct(101, "Tea", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
-        pm.reviewProduct(101, Rating.FOUR_STAR, "Nice hot cup of tea");
-        pm.reviewProduct(101, Rating.TWO_STAR, "Rather weak tea");
-        pm.reviewProduct(101, Rating.ONE_STAR, "Good tea");
-        pm.reviewProduct(101, Rating.THREE_STAR, "Just add some lemon");
+        pm.printProductReport(101);
+        pm.parseReview("101, Rating.FOUR_STAR, Nice hot cup of tea");
+        pm.printProductReport(101);
+//        pm.reviewProduct(101, Rating.FOUR_STAR, "Nice hot cup of tea");
+//        pm.reviewProduct(101, Rating.TWO_STAR, "Rather weak tea");
+//        pm.reviewProduct(101, Rating.ONE_STAR, "Good tea");
+//        pm.reviewProduct(42, Rating.THREE_STAR, "Just add some lemon");
 //        pm.printProductReport(101);
+//        pm.printProductReport(42);
 
 //        Product p2 = pm.createProduct(102, "Coffee", BigDecimal.valueOf(1.99), Rating.FOUR_STAR);
 //        p2 = pm.reviewProduct(p2, Rating.TWO_STAR, "Coffee was Ok");
