@@ -1,6 +1,7 @@
 package labs.pm.data;
 
 import java.math.BigDecimal;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -8,7 +9,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -32,6 +32,15 @@ public class ProductManager {
 //    private DateTimeFormatter dateFormat;
 //    private NumberFormat moneyFormat;l
     private Map<Product, List<Review>> products = new HashMap<>();
+    private static final Logger logger = Logger.getLogger(ProductManager.class.getName());
+    private final ResourceBundle config = ResourceBundle.getBundle("labs.pm.data.config");
+    private final MessageFormat reviewFormat = new MessageFormat(config.getString("labs.pm.data.config"));
+//    private final MessageFormat productFormat = new MessageFormat(config.getString("labs.pm.data.config"));
+
+//    Path where reports will be created
+    private Path reportsFolder = Path.of(config.getString("reports.folder"));
+    private Path dataFolder = Path.of(config.getString("data.folder"));
+    private Path tempFolder = Path.of(config.getString("temp.folder"));
 
     private static class ResourceFormatter {
 
@@ -39,10 +48,6 @@ public class ProductManager {
         private ResourceBundle resources;
         private DateTimeFormatter dateFormat;
         private NumberFormat moneyFormat;
-        private static final Logger logger = Logger.getLogger(ProductManager.class.getName());
-        private ResourceBundle config = ResourceBundle.getBundle("labs.pm.data.config");
-        private MessageFormat reviewFormat = new MessageFormat(config.getString("labs.pm.data.config"));
-        private MessageFormat productFormat = new MessageFormat(config.getString("labs.pm.data.config"));
 
         private ResourceFormatter(Locale locale) {
             this.locale = locale;
@@ -63,19 +68,6 @@ public class ProductManager {
             return MessageFormat.format(resources.getString("review"),
                     review.getRating().getStars(),
                     review.getComments());
-        }
-
-        public void parseReview(String text) {
-            try {
-                Object[] values = reviewFormat.parse(text);
-                reviewProduct(
-                        Integer.parseInt((String) values[0]),
-                        Rateable.convert(Integer.parseInt((String) values[1])),
-                        (String) values[2]
-                );
-            } catch (ParseException ex) {
-                logger.log(Level.WARNING, "Error parsing review " + text, ex);
-            }
         }
 
         private String getText(String key) {
@@ -183,24 +175,37 @@ public class ProductManager {
     public void printProductReport(Product product) {
         List<Review> reviews = products.get(product);
         Collections.sort(reviews);
-        StringBuilder txt = new StringBuilder();
+//        StringBuilder txt = new StringBuilder();
+
+//      Printing the product reports to a file
+        Path productFile = reportsFolder.resolve(
+                MessageFormat.format(
+                        config.getString("report.file"), product.getId()
+                )
+        );
+
 //        txt.append(MessageFormat.format(resources.getString("product"),
 //                product.getName(),
 //                moneyFormat.format(product.getPrice()),
 //                product.getRating().getStars(),
 //                dateFormat.format(product.getBestBefore())));
-        txt.append(formatter.formatProduct(product));
-        txt.append('\n');
+        try (PritnWriter out = new PrintWriter(
+                new OutputStreamWriter(
+                        Files.newOutputStream(productFile,
+                                StandardOpenOption.CREATE),
+                        "UTF-8"))) {
+            txt.append(formatter.formatProduct(product));
+            txt.append('\n');
 
-        if (reviews.isEmpty()) {
-            txt.append(formatter.getText("no.review"));
-        } else {
-            txt.append(reviews.stream()
-                    .map(r -> formatter.formatReview(r) + '\n')
-                    .collect(Collectors.joining()));
+            if (reviews.isEmpty()) {
+                txt.append(formatter.getText("no.review"));
+            } else {
+                txt.append(reviews.stream()
+                        .map(r -> formatter.formatReview(r) + '\n')
+                        .collect(Collectors.joining()));
+            }
+            System.out.println(txt);
         }
-        System.out.println(txt);
-
 //        for (Review review : reviews) {
 //            if (review == null) {
 //                break;
@@ -273,6 +278,21 @@ public class ProductManager {
                                         discount -> formatter.moneyFormat.format(discount)
                                 )));
 
+    }
+
+    /**
+     * 12-2 : Text Parsing Operations
+     */
+    public void parseReview(String text) {
+        try {
+            Object[] values = reviewFormat.parse(text);
+            reviewProduct(
+                    Integer.parseInt((String) values[0]),
+                    Rateable.convert(Integer.parseInt((String) values[1])),
+                    (String) values[2]);
+        } catch (ParseException ex) {
+            logger.log(Level.WARNING, "Error parsing review " + text, ex);
+        }
     }
 
 }
